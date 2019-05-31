@@ -8,6 +8,11 @@ import (
 	"os"
 )
 
+type AsanaArgument struct {
+	TaskID    string `json:"task_id,omitempty"`
+	ProjectID string `json:"project_id,omitempty"`
+}
+
 type Message struct {
 	Success    string `json:"success"`
 	Message    string `json:"message"`
@@ -28,7 +33,7 @@ func CreateProject(responseWriter http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	param.Layout = asana.BoardLayout
+	param.Layout = asana.ListLayout
 
 	client, err := asana.NewClient(accessToken)
 	if err != nil {
@@ -68,11 +73,41 @@ func CreateTask(responseWriter http.ResponseWriter, request *http.Request) {
 
 	task, taskErr := client.CreateTask(param)
 	if taskErr != nil {
-		result.WriteErrorResponse(responseWriter, taskErr)
+		result.WriteErrorResponseString(responseWriter, taskErr.Error())
 		return
 	}
 
 	bytes, _ := json.Marshal(task)
 	result.WriteJsonResponse(responseWriter, bytes, http.StatusOK)
 
+}
+
+//DeleteProject asana
+func DeleteProject(responseWriter http.ResponseWriter, request *http.Request) {
+
+	var accessToken = os.Getenv("ACCESS_TOKEN")
+
+	decoder := json.NewDecoder(request.Body)
+
+	var param AsanaArgument
+	decodeErr := decoder.Decode(&param)
+	if decodeErr != nil {
+		result.WriteErrorResponse(responseWriter, decodeErr)
+		return
+	}
+
+	client, err := asana.NewClient(accessToken)
+	if err != nil {
+		result.WriteErrorResponse(responseWriter, err)
+		return
+	}
+
+	if err := client.DeleteProjectByID(param.ProjectID); err != nil {
+		result.WriteErrorResponseString(responseWriter, err.Error())
+		return
+	}
+
+	message := Message{"true", "Project deleted successfully", http.StatusOK}
+	bytes, _ := json.Marshal(message)
+	result.WriteJsonResponse(responseWriter, bytes, http.StatusOK)
 }

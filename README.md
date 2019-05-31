@@ -30,6 +30,10 @@ $ omg run create_project -a name=<PROJECT_NAME> -a notes=<NOTES> -a color=<COLOR
 ```sh
 $ omg run create_task -a name=<TASK_NAME> -a notes=<NOTES> -a project=<PROJECT_ID> -a assignee=<ASSIGNEE_EMAIL_ADDRESS> -a workspace=<WORKSPACE_ID> -a followers=<LIST_OF_EMAIL_ADDRESS> -a hearted=<BOOLEAN> -e ACCESS_TOKEN=<ACCESS_TOKEN>
 ```
+##### Delete Project
+```sh
+$ omg run delete_task -a project_id=<PROJECT_ID> -e ACCESS_TOKEN=<ACCESS_TOKEN>
+```
 
 ## License
 ### [MIT](https://choosealicense.com/licenses/mit/)

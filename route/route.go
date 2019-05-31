@@ -29,6 +29,12 @@ var routes = Routes{
         "/createtask",
         asana.CreateTask,
     },
+    Route{
+        "DeleteProject",
+        "POST",
+        "/deleteproject",
+        asana.DeleteProject,
+    },
 }
 
 func NewRouter() *mux.Router {

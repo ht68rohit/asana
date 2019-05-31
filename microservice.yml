@@ -129,6 +129,32 @@ actions:
         workspace:
           help: The workspace details of project.
           type: object
+  delete_project:
+    help: Create new task.
+    http:
+      port: 3000
+      method: post
+      path: /deleteproject
+      contentType: application/json
+    arguments:
+      project_id:
+        type: string
+        in: requestBody
+        required: true
+        help: The name for new task.
+    output:
+      type: object
+      contentType: application/json
+      properties:
+        success:
+          help: Returns true/false.
+          type: string
+        message:
+          help: The success message or error message if occurred.
+          type: string
+        status_code:
+          help: Returns http status code.
+          type: int
 environment:
   ACCESS_TOKEN:
     type: string
