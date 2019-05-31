@@ -32,7 +32,7 @@ $ omg run create_task -a name=<TASK_NAME> -a notes=<NOTES> -a project=<PROJECT_I
 ```
 ##### Delete Project
 ```sh
-$ omg run delete_task -a project_id=<PROJECT_ID> -e ACCESS_TOKEN=<ACCESS_TOKEN>
+$ omg run delete_project -a project_id=<PROJECT_ID> -e ACCESS_TOKEN=<ACCESS_TOKEN>
 ```
 
 ## License
