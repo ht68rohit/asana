@@ -67,6 +67,68 @@ actions:
         followers:
           help: The followers list from the project.
           type: list
+  create_task:
+    help: Create new task.
+    http:
+      port: 3000
+      method: post
+      path: /createtask
+      contentType: application/json
+    arguments:
+      name:
+        type: string
+        in: requestBody
+        required: true
+        help: The name for new task.
+      notes:
+        type: string
+        in: requestBody
+        help: The notes for new task.
+      assignee:
+        type: string
+        in: requestBody
+        required: true
+        help: The email address of assignee.
+      project:
+        type: string
+        in: requestBody
+        help: The ID of project to create task in that project.
+      workspace:
+        type: string
+        in: requestBody
+        required: true
+        help: The workspace ID to create task in that workspace.
+      followers:
+        type: list
+        in: requestBody
+        required: true
+        help: The list of email address of all the follower for the task.
+      hearted:
+        type: boolean
+        in: requestBody
+        help: The provide true/false to like/unlike te task.
+    output:
+      type: object
+      contentType: application/json
+      properties:
+        id:
+          help: The ID of task.
+          type: string
+        assignee:
+          help: The assignee details.
+          type: object
+        created_at:
+          help: The created date time of task.
+          type: string
+        followers:
+          help: The followers list from the project.
+          type: list
+        name:
+          help: The name of project.
+          type: string
+        workspace:
+          help: The workspace details of project.
+          type: object
 environment:
   ACCESS_TOKEN:
     type: string

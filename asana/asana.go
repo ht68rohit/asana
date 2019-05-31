@@ -17,7 +17,7 @@ type Message struct {
 //CreateProject asana
 func CreateProject(responseWriter http.ResponseWriter, request *http.Request) {
 
-	var token = os.Getenv("ACCESS_TOKEN")
+	var accessToken = os.Getenv("ACCESS_TOKEN")
 
 	decoder := json.NewDecoder(request.Body)
 
@@ -30,7 +30,7 @@ func CreateProject(responseWriter http.ResponseWriter, request *http.Request) {
 
 	param.Layout = asana.BoardLayout
 
-	client, err := asana.NewClient(token)
+	client, err := asana.NewClient(accessToken)
 	if err != nil {
 		result.WriteErrorResponse(responseWriter, err)
 		return
@@ -44,4 +44,35 @@ func CreateProject(responseWriter http.ResponseWriter, request *http.Request) {
 
 	bytes, _ := json.Marshal(project)
 	result.WriteJsonResponse(responseWriter, bytes, http.StatusOK)
+}
+
+//CreateTask asana
+func CreateTask(responseWriter http.ResponseWriter, request *http.Request) {
+
+	var accessToken = os.Getenv("ACCESS_TOKEN")
+
+	decoder := json.NewDecoder(request.Body)
+
+	var param *asana.TaskRequest
+	decodeErr := decoder.Decode(&param)
+	if decodeErr != nil {
+		result.WriteErrorResponse(responseWriter, decodeErr)
+		return
+	}
+
+	client, err := asana.NewClient(accessToken)
+	if err != nil {
+		result.WriteErrorResponse(responseWriter, err)
+		return
+	}
+
+	task, taskErr := client.CreateTask(param)
+	if taskErr != nil {
+		result.WriteErrorResponse(responseWriter, taskErr)
+		return
+	}
+
+	bytes, _ := json.Marshal(task)
+	result.WriteJsonResponse(responseWriter, bytes, http.StatusOK)
+
 }
