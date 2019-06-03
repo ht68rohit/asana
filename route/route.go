@@ -35,6 +35,54 @@ var routes = Routes{
         "/deleteproject",
         asana.DeleteProject,
     },
+    Route{
+        "DeleteTask",
+        "POST",
+        "/deletetask",
+        asana.DeleteTask,
+    },
+    Route{
+        "ListTask",
+        "POST",
+        "/listtask",
+        asana.ListTask,
+    },
+    Route{
+        "ListWorkspace",
+        "POST",
+        "/listworkspace",
+        asana.ListWorkspace,
+    },
+    Route{
+        "FindTask",
+        "POST",
+        "/findtask",
+        asana.FindTask,
+    },
+    Route{
+        "FindProject",
+        "POST",
+        "/findproject",
+        asana.FindProject,
+    },
+    Route{
+        "UpdateProject",
+        "POST",
+        "/updateproject",
+        asana.UpdateProject,
+    },
+    Route{
+        "UpdateProject",
+        "POST",
+        "/updateproject",
+        asana.UpdateProject,
+    },
+    Route{
+        "ListProjectTasks",
+        "POST",
+        "/listprojecttasks",
+        asana.ListProjectTasks,
+    },
 }
 
 func NewRouter() *mux.Router {

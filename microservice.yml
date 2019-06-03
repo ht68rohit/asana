@@ -155,6 +155,222 @@ actions:
         status_code:
           help: Returns http status code.
           type: int
+  delete_task:
+    help: Delete task.
+    http:
+      port: 3000
+      method: post
+      path: /deletetask
+      contentType: application/json
+    arguments:
+      task_id:
+        type: string
+        in: requestBody
+        required: true
+        help: The task id to delete.
+    output:
+      type: object
+      contentType: application/json
+      properties:
+        success:
+          help: Returns true/false.
+          type: string
+        message:
+          help: The success message or error message if occurred.
+          type: string
+        status_code:
+          help: Returns http status code.
+          type: int
+  list_task:
+    help: List task.
+    http:
+      port: 3000
+      method: post
+      path: /listtask
+      contentType: application/json
+    arguments:
+      workspace:
+        type: string
+        in: requestBody
+        required: true
+        help: The workspace id to get tasks.
+    output:
+      type: string
+      contentType: application/json
+      properties:
+        success:
+          help: Returns true/false.
+          type: string
+        message:
+          help: The success message or error message if occurred.
+          type: string
+        status_code:
+          help: Returns http status code.
+          type: int
+  list_workspace:
+    help: List workspace.
+    http:
+      port: 3000
+      method: post
+      path: /listworkspace
+      contentType: application/json
+    output:
+      type: string
+      contentType: application/json
+      properties:
+        name:
+          help: The name of workspace.
+          type: string
+        id:
+          help: The workspace ID.
+          type: string
+  find_task:
+    help: Find task.
+    http:
+      port: 3000
+      method: post
+      path: /findtask
+      contentType: application/json
+    arguments:
+      task_id:
+        type: string
+        in: requestBody
+        required: true
+        help: The Task id to get task details.
+    output:
+      type: object
+      contentType: application/json
+      properties:
+        id:
+          help: The ID of task.
+          type: string
+        assignee:
+          help: The assignee details.
+          type: object
+        created_at:
+          help: The created date time of task.
+          type: string
+        followers:
+          help: The followers list from the project.
+          type: list
+        name:
+          help: The name of project.
+          type: string
+        workspace:
+          help: The workspace details of project.
+          type: object
+  find_project:
+    help: Find project.
+    http:
+      port: 3000
+      method: post
+      path: /findproject
+      contentType: application/json
+    arguments:
+      project_id:
+        type: string
+        in: requestBody
+        required: true
+        help: The project id to get project details.
+    output:
+      type: object
+      contentType: application/json
+      properties:
+        id:
+          help: The ID of task.
+          type: string
+        assignee:
+          help: The assignee details.
+          type: object
+        created_at:
+          help: The created date time of task.
+          type: string
+        followers:
+          help: The followers list from the project.
+          type: list
+        name:
+          help: The name of project.
+          type: string
+        workspace:
+          help: The workspace details of project.
+          type: object
+  update_project:
+    help: Update project in asana.
+    http:
+      port: 3000
+      method: post
+      path: /updateproject
+      contentType: application/json
+    arguments:
+      id:
+        type: string
+        in: requestBody
+        required: true
+        help: The ID for project.
+      name:
+        type: string
+        in: requestBody
+        help: The updated name for project.
+      notes:
+        type: string
+        in: requestBody
+        help: The updated notes for project.
+      color:
+        type: string
+        in: requestBody
+        help: The updated color for the project.
+      public:
+        type: boolean
+        in: requestBody
+        help: Set true/false to keep your project public to organization.
+    output:
+      type: object
+      contentType: application/json
+      properties:
+        id:
+          help: The ID of project.
+          type: string
+        name:
+          help: The name of project.
+          type: string
+        owner:
+          help: The owner details of project.
+          type: object
+        workspace:
+          help: The workspace details of project.
+          type: object
+        members:
+          help: The members list from the project.
+          type: list
+        followers:
+          help: The followers list from the project.
+          type: list
+  list_project_tasks:
+    help: List all the tasks from project.
+    http:
+      port: 3000
+      method: post
+      path: /listprojecttasks
+      contentType: application/json
+    arguments:
+      project:
+        type: string
+        in: requestBody
+        required: true
+        help: The project id to get all tasks.
+    output:
+      type: string
+      contentType: application/json
+      properties:
+        id:
+          help: The ID of task.
+          type: string
+        modified_at:
+          help: The modified time.
+          type: string
+        name:
+          help: The name of project.
+          type: string
 environment:
   ACCESS_TOKEN:
     type: string

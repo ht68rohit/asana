@@ -34,6 +34,30 @@ $ omg run create_task -a name=<TASK_NAME> -a notes=<NOTES> -a project=<PROJECT_I
 ```sh
 $ omg run delete_project -a project_id=<PROJECT_ID> -e ACCESS_TOKEN=<ACCESS_TOKEN>
 ```
+##### Delete Task
+```sh
+$ omg run delete_task -a task_id=<TASK_ID> -e ACCESS_TOKEN=<ACCESS_TOKEN>
+```
+##### List Workspace
+```sh
+$ omg run list_workspace -e ACCESS_TOKEN=<ACCESS_TOKEN>
+```
+##### Find Task
+```sh
+$ omg run find_task -a task_id=<TASK_ID> -e ACCESS_TOKEN=<ACCESS_TOKEN>
+```
+##### Find Project
+```sh
+$ omg run find_project -a project_id=<PROJECT_ID> -e ACCESS_TOKEN=<ACCESS_TOKEN>
+```
+##### Update Project
+```sh
+$ omg run update_project -a id=<PROJECT_ID> -a name=<PROJECT_NAME> -a notes=<NOTES> -a color=<COLOR> -a public=<PUBLIC_TO_ORGANIZATION> -e ACCESS_TOKEN=<ACCESS_TOKEN>
+```
+##### List Tasks Form Project
+```sh
+$ omg run list_project_tasks -a project=<PROJECT_ID> -e ACCESS_TOKEN=<ACCESS_TOKEN>
+```
 
 ## License
 ### [MIT](https://choosealicense.com/licenses/mit/)
