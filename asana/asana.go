@@ -192,15 +192,6 @@ func ListWorkspace(responseWriter http.ResponseWriter, request *http.Request) {
 
 	var accessToken = os.Getenv("ACCESS_TOKEN")
 
-	decoder := json.NewDecoder(request.Body)
-
-	var param AsanaArgument
-	decodeErr := decoder.Decode(&param)
-	if decodeErr != nil {
-		result.WriteErrorResponse(responseWriter, decodeErr)
-		return
-	}
-
 	client, err := asana.NewClient(accessToken)
 	if err != nil {
 		result.WriteErrorResponse(responseWriter, err)
@@ -217,7 +208,6 @@ func ListWorkspace(responseWriter http.ResponseWriter, request *http.Request) {
 	pageCount := 0
 	for page := range workspacesChan {
 		if err := page.Err; err != nil {
-			log.Printf("Page: #%d err: %v", pageCount, err)
 			continue
 		}
 

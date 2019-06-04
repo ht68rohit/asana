@@ -101,7 +101,6 @@ actions:
       followers:
         type: list
         in: requestBody
-        required: true
         help: The list of email address of all the follower for the task.
       hearted:
         type: boolean
