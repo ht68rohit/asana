@@ -1,34 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-  <testsuite name="Messaging Suit" tests="31" failures="0" errors="0" time="0">
-      <testcase name="Get Card details from Trello with invalid input Get card details from board card details Should result http.StatusBadRequest" classname="Messaging Suit" time="3.5162e-05"></testcase>
-      <testcase name="Add Card to list in Trello Get card details from board card details Should result http.StatusOK" classname="Messaging Suit" time="3.479e-06"></testcase>
-      <testcase name="Copy Card to list in Trello with invalid param copy card from list copy card Should result http.StatusBadRequest" classname="Messaging Suit" time="3.067e-06"></testcase>
-      <testcase name="Create board in Trello without board name create board in trello create board Should result http.StatusBadRequest" classname="Messaging Suit" time="2.997e-06"></testcase>
-      <testcase name="Delete board in Trello with invalid param  delete board in trello delete board Should result http.StatusBadRequest" classname="Messaging Suit" time="2.933e-06"></testcase>
-      <testcase name="Add Card to list in Trello with invalid param Get card details from board card details Should result http.StatusBadRequest" classname="Messaging Suit" time="3.055e-06"></testcase>
-      <testcase name="Create list in trello board with invalid param create list in board create list Should result http.StatusBadRequest" classname="Messaging Suit" time="2.93e-06"></testcase>
-      <testcase name="Get Board details from Trello without board ID Get board details from board board details Should result http.StatusBadRequest" classname="Messaging Suit" time="3.013e-06"></testcase>
-      <testcase name="Create list in trello board create list in board create list Should result http.StatusOK" classname="Messaging Suit" time="2.957e-06"></testcase>
-      <testcase name="Add Card to list in Trello without list ID Get card details from board card details Should result http.StatusBadRequest" classname="Messaging Suit" time="3.113e-06"></testcase>
-      <testcase name="Delete board in Trello without board id delete board in trello delete board Should result http.StatusBadRequest" classname="Messaging Suit" time="2.958e-06"></testcase>
-      <testcase name="Get list details from Trello with param Get list details from board list details Should result http.StatusBadRequest" classname="Messaging Suit" time="2.942e-06"></testcase>
-      <testcase name="Move Card to list in Trello without list id move card from list move card Should result http.StatusBadRequest" classname="Messaging Suit" time="2.899e-06"></testcase>
-      <testcase name="Copy Card to list in Trello without list id copy card from list copy card Should result http.StatusBadRequest" classname="Messaging Suit" time="2.925e-06"></testcase>
-      <testcase name="Get Board details from Trello with param Get board details from board board details Should result http.StatusBadRequest" classname="Messaging Suit" time="2.915e-06"></testcase>
-      <testcase name="Get Card details from Trello without environment variables Get card details from board card details Should result http.StatusBadRequest" classname="Messaging Suit" time="3.087e-06"></testcase>
-      <testcase name="Create list in trello board without list name create list in board create list Should result http.StatusBadRequest" classname="Messaging Suit" time="2.995e-06"></testcase>
-      <testcase name="Move Card to list in Trello without card id move card from list move card Should result http.StatusBadRequest" classname="Messaging Suit" time="2.921e-06"></testcase>
-      <testcase name="Subscribe trello for card without board ID Subscribe Subscribe Should result http.StatusBadRequest" classname="Messaging Suit" time="2.949e-06"></testcase>
-      <testcase name="Copy Card to list in Trello copy card from list copy card Should result http.StatusOK" classname="Messaging Suit" time="3.067e-06"></testcase>
-      <testcase name="Move Card to list in Trello with invalid param move card from list move card Should result http.StatusBadRequest" classname="Messaging Suit" time="3.101e-06"></testcase>
-      <testcase name="Get list details from Trello without board ID Get list details from board list details Should result http.StatusBadRequest" classname="Messaging Suit" time="2.801e-06"></testcase>
-      <testcase name="Create board in Trello create board in trello create board Should result http.StatusOK" classname="Messaging Suit" time="2.918e-06"></testcase>
-      <testcase name="Get Card details from Trello Get card details from board card details Should result http.StatusOK" classname="Messaging Suit" time="2.89e-06"></testcase>
-      <testcase name="Get Board details from Trello Get board details from board board details Should result http.StatusOK" classname="Messaging Suit" time="2.957e-06"></testcase>
-      <testcase name="Copy Card to list in Trello without card id copy card from list copy card Should result http.StatusBadRequest" classname="Messaging Suit" time="2.991e-06"></testcase>
-      <testcase name="Delete board in Trello delete board in trello delete board Should result http.StatusBadRequest" classname="Messaging Suit" time="2.829e-06"></testcase>
-      <testcase name="Get list details from Trello Get list details from board list details Should result http.StatusOK" classname="Messaging Suit" time="2.756e-06"></testcase>
-      <testcase name="Create list in trello board without board ID create list in board create list Should result http.StatusBadRequest" classname="Messaging Suit" time="2.806e-06"></testcase>
-      <testcase name="Create board in Trello with invalid param  create board in trello create board Should result http.StatusBadRequest" classname="Messaging Suit" time="2.846e-06"></testcase>
-      <testcase name="Subscribe trello for card Subscribe Subscribe Should result http.StatusOK" classname="Messaging Suit" time="2.879e-06"></testcase>
+  <testsuite name="Messaging Suit" tests="10" failures="0" errors="0" time="0">
+      <testcase name="Create project in Asana without access token Create project in Asana create project Should result http.StatusBadRequest" classname="Messaging Suit" time="3.7733e-05"></testcase>
+      <testcase name="Create task in project Asana Create project in Asana create project Should result http.StatusOK" classname="Messaging Suit" time="4.222e-06"></testcase>
+      <testcase name="Find task from Asana Find task in Asana find task Should result http.StatusOK" classname="Messaging Suit" time="3.576e-06"></testcase>
+      <testcase name="List workspaces in Asana List workspaces in Asana list workspaces Should result http.StatusOK" classname="Messaging Suit" time="3.319e-06"></testcase>
+      <testcase name="Create project in Asana with invalid param Create project in Asana create project Should result http.StatusBadRequest" classname="Messaging Suit" time="3.428e-06"></testcase>
+      <testcase name="Create project in Asana Create project in Asana create project Should result http.StatusOK" classname="Messaging Suit" time="1.9323e-05"></testcase>
+      <testcase name="Find project from Asana Find project in Asana find project Should result http.StatusOK" classname="Messaging Suit" time="3.563e-06"></testcase>
+      <testcase name="Create project in Asana without workspace ID Create project in Asana create project Should result http.StatusBadRequest" classname="Messaging Suit" time="3.13e-06"></testcase>
+      <testcase name="Update project in Asana Update project in Asana update project Should result http.StatusOK" classname="Messaging Suit" time="3.601e-06"></testcase>
+      <testcase name="List tasks from project in Asana List tasks from project in Asana list tasks Should result http.StatusOK" classname="Messaging Suit" time="3.275e-06"></testcase>
   </testsuite>
