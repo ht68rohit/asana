@@ -197,11 +197,7 @@ func ListWorkspace(responseWriter http.ResponseWriter, request *http.Request) {
 		result.WriteErrorResponse(responseWriter, err)
 		return
 	}
-	workspacesChan, err := client.ListMyWorkspaces()
-	if err != nil {
-		result.WriteErrorResponseString(responseWriter, err.Error())
-		return
-	}
+	workspacesChan, _ := client.ListMyWorkspaces()
 
 	var listWorkspace []*asana.Workspace
 
