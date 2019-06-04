@@ -41,6 +41,10 @@ $ omg run delete_project -a project_id=<PROJECT_ID> -e ACCESS_TOKEN=<ACCESS_TOKE
 ```sh
 $ omg run delete_task -a task_id=<TASK_ID> -e ACCESS_TOKEN=<ACCESS_TOKEN>
 ```
+##### List Task
+```sh
+$ omg run list_task -a workspace=<WORKSPACE_ID> -e ACCESS_TOKEN=<ACCESS_TOKEN>
+```
 ##### List Workspace
 ```sh
 $ omg run list_workspace -e ACCESS_TOKEN=<ACCESS_TOKEN>
