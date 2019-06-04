@@ -416,7 +416,95 @@ var _ = Describe("Delete task in Asana", func() {
 	})
 })
 
-var _ = Describe("List workspaces in Asana wihout access token", func() {
+//--------------------------------------------------------------------------
+
+var _ = Describe("List task in Asana without access token", func() {
+
+	os.Setenv("ACCESS_TOKEN", "")
+
+	asana := AsanaArgs{}
+	requestBody := new(bytes.Buffer)
+	jsonErr := json.NewEncoder(requestBody).Encode(asana)
+	if jsonErr != nil {
+		log.Fatal(jsonErr)
+	}
+
+	request, err := http.NewRequest("POST", "/listtask", requestBody)
+	if err != nil {
+		log.Fatal(err)
+	}
+	recorder := httptest.NewRecorder()
+	handler := http.HandlerFunc(ListTask)
+	handler.ServeHTTP(recorder, request)
+
+	Describe("List task in Asana", func() {
+		Context("list task", func() {
+			It("Should result http.StatusBadRequest", func() {
+				Expect(http.StatusBadRequest).To(Equal(recorder.Code))
+			})
+		})
+	})
+})
+
+var _ = Describe("List task in Asana with invalid param", func() {
+
+	os.Setenv("ACCESS_TOKEN", ACCESS_TOKEN)
+
+	asana := []byte(`{"status":false}`)
+	requestBody := new(bytes.Buffer)
+	jsonErr := json.NewEncoder(requestBody).Encode(asana)
+	if jsonErr != nil {
+		log.Fatal(jsonErr)
+	}
+
+	request, err := http.NewRequest("POST", "/listtask", requestBody)
+	if err != nil {
+		log.Fatal(err)
+	}
+	recorder := httptest.NewRecorder()
+	handler := http.HandlerFunc(ListTask)
+	handler.ServeHTTP(recorder, request)
+
+	Describe("List task in Asana", func() {
+		Context("list task", func() {
+			It("Should result http.StatusBadRequest", func() {
+				Expect(http.StatusBadRequest).To(Equal(recorder.Code))
+			})
+		})
+	})
+})
+
+var _ = Describe("List task in Asana", func() {
+
+	os.Setenv("ACCESS_TOKEN", ACCESS_TOKEN)
+
+	asana := AsanaArgs{Workspace: "1125282043940580"}
+	requestBody := new(bytes.Buffer)
+	jsonErr := json.NewEncoder(requestBody).Encode(asana)
+	if jsonErr != nil {
+		log.Fatal(jsonErr)
+	}
+
+	request, err := http.NewRequest("POST", "/listtask", requestBody)
+	if err != nil {
+		log.Fatal(err)
+	}
+	recorder := httptest.NewRecorder()
+	handler := http.HandlerFunc(ListTask)
+	handler.ServeHTTP(recorder, request)
+
+	Describe("List task in Asana", func() {
+		Context("list task", func() {
+			It("Should result http.StatusOK", func() {
+				Expect(http.StatusOK).To(Equal(recorder.Code))
+			})
+		})
+	})
+})
+
+//--------------------------------------------------------------------------
+
+var _ = Describe("List workspaces in Asana without access token", func() {
 
 	os.Setenv("ACCESS_TOKEN", "")
 

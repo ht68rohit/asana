@@ -197,15 +197,12 @@ actions:
       type: string
       contentType: application/json
       properties:
-        success:
-          help: Returns true/false.
+        name:
+          help: The name of workspace.
           type: string
-        message:
-          help: The success message or error message if occurred.
+        id:
+          help: The workspace ID.
           type: string
-        status_code:
-          help: Returns http status code.
-          type: int
   list_workspace:
     help: List workspace.
     http:

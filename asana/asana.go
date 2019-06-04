@@ -152,7 +152,7 @@ func ListTask(responseWriter http.ResponseWriter, request *http.Request) {
 
 	decoder := json.NewDecoder(request.Body)
 
-	var param AsanaArgument
+	var param *asana.TaskRequest
 	decodeErr := decoder.Decode(&param)
 	if decodeErr != nil {
 		result.WriteErrorResponse(responseWriter, decodeErr)
@@ -165,13 +165,12 @@ func ListTask(responseWriter http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	taskPagesChan, err := client.ListMyTasks(&asana.TaskRequest{
-		Workspace: "331727068525363",
-	})
+	taskPagesChan, err := client.ListMyTasks(param)
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	var listTasks []*asana.Task
 	pageCount := 0
 	for page := range taskPagesChan {
 		if err := page.Err; err != nil {
@@ -179,11 +178,13 @@ func ListTask(responseWriter http.ResponseWriter, request *http.Request) {
 			continue
 		}
 
-		for i, task := range page.Tasks {
-			log.Printf("Page: #%d i: %d task: %#v", pageCount, i, task)
+		for _, task := range page.Tasks {
+			listTasks = append(listTasks, task)
 		}
 		pageCount += 1
 	}
+	bytes, _ := json.Marshal(listTasks)
+	result.WriteJsonResponse(responseWriter, bytes, http.StatusOK)
 
 }
 
