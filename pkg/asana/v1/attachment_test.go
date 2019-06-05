@@ -59,7 +59,7 @@ func TestFindAttachmentByID(t *testing.T) {
 		attachment, err := client.FindAttachmentByID(tt.attachmentID)
 		if tt.wantErr {
 			if err == nil {
-				t.Errorf("#%d: wanted non-nil error")
+				t.Errorf("#%d: wanted non-nil error", err)
 			}
 			continue
 		}
@@ -107,7 +107,7 @@ func TestListAllAttachmentForTask(t *testing.T) {
 		attachmentsPage, err := client.ListAllAttachmentsForTask(tt.taskID)
 		if tt.wantErr {
 			if err == nil {
-				t.Errorf("#%d: wanted non-nil error")
+				t.Errorf("#%d: wanted non-nil error", err)
 			}
 			continue
 		}
