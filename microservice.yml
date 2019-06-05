@@ -89,7 +89,7 @@ actions:
         in: requestBody
         required: true
         help: The email address of assignee.
-      project:
+      projects:
         type: string
         in: requestBody
         help: The ID of project to create task in that project.
@@ -349,7 +349,7 @@ actions:
       path: /listprojecttasks
       contentType: application/json
     arguments:
-      project:
+      projects:
         type: string
         in: requestBody
         required: true

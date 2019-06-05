@@ -3,8 +3,8 @@ package asana
 import (
 	"encoding/json"
 	"fmt"
+	asana "github.com/heaptracetechnology/microservice-asana/pkg/asana/v1"
 	result "github.com/heaptracetechnology/microservice-asana/result"
-	asana "github.com/odeke-em/asana/v1"
 	"log"
 	"net/http"
 	"os"
@@ -63,9 +63,13 @@ func CreateTask(responseWriter http.ResponseWriter, request *http.Request) {
 	var param *asana.TaskRequest
 	decodeErr := decoder.Decode(&param)
 	if decodeErr != nil {
+		fmt.Println("decodeErr :: ", decodeErr)
 		result.WriteErrorResponse(responseWriter, decodeErr)
 		return
 	}
+
+	res, _ := json.Marshal(param)
+	fmt.Println("res :::::", string(res))
 
 	client, err := asana.NewClient(accessToken)
 	if err != nil {
@@ -75,10 +79,11 @@ func CreateTask(responseWriter http.ResponseWriter, request *http.Request) {
 
 	task, taskErr := client.CreateTask(param)
 	if taskErr != nil {
+		fmt.Println("taskErr :: ", taskErr.Error())
 		result.WriteErrorResponseString(responseWriter, taskErr.Error())
 		return
 	}
-
+	fmt.Println("task :: ", task)
 	bytes, _ := json.Marshal(task)
 	result.WriteJsonResponse(responseWriter, bytes, http.StatusOK)
 

@@ -31,7 +31,7 @@ $ omg run create_project -a name=<PROJECT_NAME> -a notes=<NOTES> -a color=<COLOR
 ```
 ##### Create Task
 ```sh
-$ omg run create_task -a name=<TASK_NAME> -a notes=<NOTES> -a project=<PROJECT_ID> -a assignee=<ASSIGNEE_EMAIL_ADDRESS> -a workspace=<WORKSPACE_ID> -a followers=<LIST_OF_EMAIL_ADDRESS> -a hearted=<BOOLEAN> -e ACCESS_TOKEN=<ACCESS_TOKEN>
+$ omg run create_task -a name=<TASK_NAME> -a notes=<NOTES> -a projects=<PROJECT_ID> -a assignee=<ASSIGNEE_EMAIL_ADDRESS> -a workspace=<WORKSPACE_ID> -a followers=<LIST_OF_EMAIL_ADDRESS> -a hearted=<BOOLEAN> -e ACCESS_TOKEN=<ACCESS_TOKEN>
 ```
 ##### Delete Project
 ```sh
@@ -63,7 +63,7 @@ $ omg run update_project -a id=<PROJECT_ID> -a name=<PROJECT_NAME> -a notes=<NOT
 ```
 ##### List Tasks Form Project
 ```sh
-$ omg run list_project_tasks -a project=<PROJECT_ID> -e ACCESS_TOKEN=<ACCESS_TOKEN>
+$ omg run list_project_tasks -a projects=<PROJECT_ID> -e ACCESS_TOKEN=<ACCESS_TOKEN>
 ```
 
 ## License
