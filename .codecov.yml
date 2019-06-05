@@ -1,5 +1,2 @@
-codecov:
-  
-  
 ignore:
   - "pkg/asana/v1"  # ignore folders and all its contents
