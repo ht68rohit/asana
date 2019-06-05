@@ -1,3 +1,5 @@
 codecov:
-  ignore:
-    - "github.com/heaptracetechnology/microservice-asana/pkg/asana/v1"  # ignore folders and all its contents
+  
+  
+ignore:
+  - "pkg/asana/v1"  # ignore folders and all its contents
