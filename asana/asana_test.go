@@ -3,6 +3,7 @@ package asana
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"log"
@@ -16,10 +17,9 @@ type AsanaArgs struct {
 	Workspace string `json:"workspace,omitempty"`
 	Public    bool   `json:"public,omitempty"`
 	Assignee  string `json:"assignee,omitempty"`
-	TaskID    string `json:"task_id,omitempty"`
-	ProjectID string `json:"project_id,omitempty"`
+	TaskID    string `json:"taskId,omitempty"`
+	ProjectID string `json:"projectId,omitempty"`
 	Project   string `json:"id,omitempty"`
-	ProjID    string `json:"projects,omitempty"`
 }
 
 type NamedAndIDdEntity struct {
@@ -230,7 +230,7 @@ var _ = Describe("Create task in project Asana", func() {
 	os.Setenv("ACCESS_TOKEN", ACCESS_TOKEN)
 
 	asana := AsanaArgs{Name: "Test13213113131", Workspace: "1125282043940580", Assignee: "demot636@gmail.com"}
-	asana.ProjID = "1125306086215096"
+	asana.ProjectID = "1125306086215096"
 	requestBody := new(bytes.Buffer)
 	jsonErr := json.NewEncoder(requestBody).Encode(asana)
 	if jsonErr != nil {
@@ -422,8 +422,6 @@ var _ = Describe("Delete task in Asana", func() {
 	})
 })
 
-//--------------------------------------------------------------------------
-
 var _ = Describe("List task in Asana without access token", func() {
 
 	os.Setenv("ACCESS_TOKEN", "")
@@ -480,6 +478,34 @@ var _ = Describe("List task in Asana with invalid param", func() {
 	})
 })
 
+var _ = Describe("List task in Asana with invalid Workspace Id", func() {
+
+	os.Setenv("ACCESS_TOKEN", ACCESS_TOKEN)
+
+	asana := AsanaArgs{Workspace: "1125282043940580111"}
+	requestBody := new(bytes.Buffer)
+	jsonErr := json.NewEncoder(requestBody).Encode(asana)
+	if jsonErr != nil {
+		log.Fatal(jsonErr)
+	}
+
+	request, err := http.NewRequest("POST", "/listtask", requestBody)
+	if err != nil {
+		log.Fatal(err)
+	}
+	recorder := httptest.NewRecorder()
+	handler := http.HandlerFunc(ListTask)
+	handler.ServeHTTP(recorder, request)
+
+	Describe("List task in Asana", func() {
+		Context("list task", func() {
+			It("Should result http.StatusBadRequest", func() {
+				Expect(http.StatusBadRequest).To(Equal(recorder.Code))
+			})
+		})
+	})
+})
+
 var _ = Describe("List task in Asana", func() {
 
 	os.Setenv("ACCESS_TOKEN", ACCESS_TOKEN)
@@ -507,8 +533,6 @@ var _ = Describe("List task in Asana", func() {
 		})
 	})
 })
-
-//--------------------------------------------------------------------------
 
 var _ = Describe("List workspaces in Asana without access token", func() {
 
@@ -906,7 +930,7 @@ var _ = Describe("List tasks from project in Asana without access token", func()
 
 	os.Setenv("ACCESS_TOKEN", "")
 
-	asana := AsanaArgs{ProjID: "1125306086215096"}
+	asana := AsanaArgs{ProjectID: "1125306086215096"}
 	requestBody := new(bytes.Buffer)
 	jsonErr := json.NewEncoder(requestBody).Encode(asana)
 	if jsonErr != nil {
@@ -958,11 +982,11 @@ var _ = Describe("List tasks from project in Asana with invalid param", func() {
 	})
 })
 
-var _ = Describe("List tasks from project in Asana", func() {
+var _ = Describe("List tasks from project in Asana with invalid project Id", func() {
 
 	os.Setenv("ACCESS_TOKEN", ACCESS_TOKEN)
 
-	asana := AsanaArgs{ProjID: "1125306086215096"}
+	asana := AsanaArgs{ProjectID: "1125306086215096111"}
 	requestBody := new(bytes.Buffer)
 	jsonErr := json.NewEncoder(requestBody).Encode(asana)
 	if jsonErr != nil {
@@ -979,6 +1003,130 @@ var _ = Describe("List tasks from project in Asana", func() {
 
 	Describe("List tasks from project in Asana", func() {
 		Context("list tasks", func() {
+			It("Should result http.StatusBadRequest", func() {
+				Expect(http.StatusBadRequest).To(Equal(recorder.Code))
+			})
+		})
+	})
+})
+
+var _ = Describe("List tasks from project in Asana", func() {
+
+	os.Setenv("ACCESS_TOKEN", ACCESS_TOKEN)
+
+	asana := AsanaArgs{ProjectID: "1125306086215096"}
+	requestBody := new(bytes.Buffer)
+	jsonErr := json.NewEncoder(requestBody).Encode(asana)
+	if jsonErr != nil {
+		log.Fatal(jsonErr)
+	}
+
+	request, err := http.NewRequest("POST", "/listprojecttasks", requestBody)
+	if err != nil {
+		log.Fatal(err)
+	}
+	recorder := httptest.NewRecorder()
+	handler := http.HandlerFunc(ListProjectTasks)
+	handler.ServeHTTP(recorder, request)
+
+	Describe("List tasks from project in Asana", func() {
+		Context("list tasks", func() {
+			It("Should result http.StatusOK", func() {
+				Expect(http.StatusOK).To(Equal(recorder.Code))
+			})
+		})
+	})
+})
+
+var _ = Describe("Subscribe asana for task without token", func() {
+
+	os.Setenv("ACCESS_TOKEN", "")
+
+	data := DataArgs{WorkspaceID: "1125282043940580", Existing: true}
+	sub := Subscribe{Endpoint: "https://webhook.site/3cee781d-0a87-4966-bdec-9635436294e9",
+		ID:        "1",
+		IsTesting: true,
+		Data:      data,
+	}
+	requestBody := new(bytes.Buffer)
+	err := json.NewEncoder(requestBody).Encode(sub)
+	if err != nil {
+		fmt.Println(" request err :", err)
+	}
+	req, err := http.NewRequest("POST", "/subscribe", requestBody)
+	if err != nil {
+		log.Fatal(err)
+	}
+	recorder := httptest.NewRecorder()
+	handler := http.HandlerFunc(SubscribeTasks)
+	handler.ServeHTTP(recorder, req)
+
+	Describe("Subscribe", func() {
+		Context("Subscribe", func() {
+			It("Should result http.StatusBadRequest", func() {
+				Expect(http.StatusBadRequest).To(Equal(recorder.Code))
+			})
+		})
+	})
+})
+
+var _ = Describe("Subscribe asana for task without any id's", func() {
+
+	os.Setenv("ACCESS_TOKEN", ACCESS_TOKEN)
+
+	data := DataArgs{WorkspaceID: "", ProjectID: "", Existing: true}
+	sub := Subscribe{Endpoint: "https://webhook.site/3cee781d-0a87-4966-bdec-9635436294e9",
+		ID:        "1",
+		IsTesting: true,
+		Data:      data,
+	}
+	requestBody := new(bytes.Buffer)
+	err := json.NewEncoder(requestBody).Encode(sub)
+	if err != nil {
+		fmt.Println(" request err :", err)
+	}
+	req, err := http.NewRequest("POST", "/subscribe", requestBody)
+	if err != nil {
+		log.Fatal(err)
+	}
+	recorder := httptest.NewRecorder()
+	handler := http.HandlerFunc(SubscribeTasks)
+	handler.ServeHTTP(recorder, req)
+
+	Describe("Subscribe", func() {
+		Context("Subscribe", func() {
+			It("Should result http.StatusBadRequest", func() {
+				Expect(http.StatusBadRequest).To(Equal(recorder.Code))
+			})
+		})
+	})
+})
+
+var _ = Describe("Subscribe asana for task", func() {
+
+	os.Setenv("ACCESS_TOKEN", ACCESS_TOKEN)
+
+	data := DataArgs{WorkspaceID: "1125282043940580", Existing: true}
+	sub := Subscribe{Endpoint: "https://webhook.site/3cee781d-0a87-4966-bdec-9635436294e9",
+		ID:        "1",
+		IsTesting: true,
+		Data:      data,
+	}
+	requestBody := new(bytes.Buffer)
+	err := json.NewEncoder(requestBody).Encode(sub)
+	if err != nil {
+		fmt.Println(" request err :", err)
+	}
+	req, err := http.NewRequest("POST", "/subscribe", requestBody)
+	if err != nil {
+		log.Fatal(err)
+	}
+	recorder := httptest.NewRecorder()
+	handler := http.HandlerFunc(SubscribeTasks)
+	handler.ServeHTTP(recorder, req)
+
+	Describe("Subscribe", func() {
+		Context("Subscribe", func() {
 			It("Should result http.StatusOK", func() {
 				Expect(http.StatusOK).To(Equal(recorder.Code))
 			})

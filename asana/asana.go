@@ -36,14 +36,14 @@ type DataArgs struct {
 }
 
 type AsanaArgument struct {
-	TaskID    string `json:"task_id,omitempty"`
-	ProjectID string `json:"project_id,omitempty"`
+	TaskID    string `json:"taskId,omitempty"`
+	ProjectID string `json:"projectId,omitempty"`
 }
 
 type Message struct {
 	Success    string `json:"success"`
 	Message    string `json:"message"`
-	StatusCode int    `json:"status_code"`
+	StatusCode int    `json:"statusCode"`
 }
 
 var Listener = make(map[string]Subscribe)
@@ -94,13 +94,9 @@ func CreateTask(responseWriter http.ResponseWriter, request *http.Request) {
 	var param *asana.TaskRequest
 	decodeErr := decoder.Decode(&param)
 	if decodeErr != nil {
-		fmt.Println("decodeErr :: ", decodeErr)
 		result.WriteErrorResponse(responseWriter, decodeErr)
 		return
 	}
-
-	res, _ := json.Marshal(param)
-	fmt.Println("res :::::", string(res))
 
 	client, err := asana.NewClient(accessToken)
 	if err != nil {
@@ -108,13 +104,12 @@ func CreateTask(responseWriter http.ResponseWriter, request *http.Request) {
 		return
 	}
 
+	param.ProjectID = param.TempProjectID
 	task, taskErr := client.CreateTask(param)
 	if taskErr != nil {
-		fmt.Println("taskErr :: ", taskErr.Error())
 		result.WriteErrorResponseString(responseWriter, taskErr.Error())
 		return
 	}
-	fmt.Println("task :: ", task)
 	bytes, _ := json.Marshal(task)
 	result.WriteJsonResponse(responseWriter, bytes, http.StatusOK)
 
@@ -194,34 +189,30 @@ func ListTask(responseWriter http.ResponseWriter, request *http.Request) {
 		result.WriteErrorResponse(responseWriter, decodeErr)
 		return
 	}
-
+	var allTasks []*asana.Task
 	client, err := asana.NewClient(accessToken)
 	if err != nil {
 		result.WriteErrorResponse(responseWriter, err)
 		return
 	}
 
-	taskPagesChan, err := client.ListMyTasks(param)
-	if err != nil {
-		log.Fatal(err)
-	}
+	taskPagesChan, _ := client.ListMyTasks(param)
 
-	var listTasks []*asana.Task
 	pageCount := 0
 	for page := range taskPagesChan {
 		if err := page.Err; err != nil {
-			log.Printf("Page: #%d err: %v", pageCount, err)
-			continue
+			result.WriteErrorResponseString(responseWriter, err.Error())
+			return
 		}
 
 		for _, task := range page.Tasks {
-			listTasks = append(listTasks, task)
+			taskDetails, _ := client.FindTaskByID(strconv.FormatInt(task.ID, 10))
+			allTasks = append(allTasks, taskDetails)
 		}
-		pageCount += 1
+		pageCount++
 	}
-	bytes, _ := json.Marshal(listTasks)
+	bytes, _ := json.Marshal(allTasks)
 	result.WriteJsonResponse(responseWriter, bytes, http.StatusOK)
-
 }
 
 //ListWorkspace asana
@@ -356,32 +347,31 @@ func ListProjectTasks(responseWriter http.ResponseWriter, request *http.Request)
 		return
 	}
 
+	var allTasks []*asana.Task
 	client, err := asana.NewClient(accessToken)
 	if err != nil {
 		result.WriteErrorResponse(responseWriter, err)
 		return
 	}
 
-	taskPagesChan, _, err := client.ListTasksForProject(param)
-	if err != nil {
-		log.Fatal(err)
-	}
+	param.ProjectID = param.TempProjectID
+	taskPagesChan, _, _ := client.ListTasksForProject(param)
 
-	var tasklist []*asana.Task
 	pageCount := 0
 	for page := range taskPagesChan {
 		if err := page.Err; err != nil {
-			log.Printf("Page: #%d err: %v", pageCount, err)
-			continue
+			result.WriteErrorResponseString(responseWriter, err.Error())
+			return
 		}
 
 		for _, task := range page.Tasks {
-			tasklist = append(tasklist, task)
+			taskDetails, _ := client.FindTaskByID(strconv.FormatInt(task.ID, 10))
+			allTasks = append(allTasks, taskDetails)
 		}
-		pageCount += 1
+		pageCount++
 	}
 
-	bytes, _ := json.Marshal(tasklist)
+	bytes, _ := json.Marshal(allTasks)
 	result.WriteJsonResponse(responseWriter, bytes, http.StatusOK)
 }
 

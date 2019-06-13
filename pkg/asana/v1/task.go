@@ -241,16 +241,17 @@ type taskPager struct {
 }
 
 type TaskRequest struct {
-	Page        int        `json:"page,omitempty"`
-	Limit       int        `json:"limit,omitempty"`
-	MaxRetries  int        `json:"max_retries,omitempty"`
-	Assignee    string     `json:"assignee"`
-	ProjectID   string     `json:"projects,omitempty"`
-	Workspace   string     `json:"workspace,omitempty"`
-	ID          int64      `json:"id,omitempty"`
-	CreatedAt   *time.Time `json:"created_at,omitempty"`
-	Completed   bool       `json:"completed,omitempty"`
-	CompletedAt *time.Time `json:"completed_at,omitempty"`
+	Page          int        `json:"page,omitempty"`
+	Limit         int        `json:"limit,omitempty"`
+	MaxRetries    int        `json:"max_retries,omitempty"`
+	Assignee      string     `json:"assignee"`
+	ProjectID     string     `json:"projects,omitempty"`
+	TempProjectID string     `json:"projectId,omitempty"`
+	Workspace     string     `json:"workspace,omitempty"`
+	ID            int64      `json:"id,omitempty"`
+	CreatedAt     *time.Time `json:"created_at,omitempty"`
+	Completed     bool       `json:"completed,omitempty"`
+	CompletedAt   *time.Time `json:"completed_at,omitempty"`
 
 	AssigneeStatus AssigneeStatus `json:"assignee_status,omitempty"`
 

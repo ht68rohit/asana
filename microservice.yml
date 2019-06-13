@@ -14,7 +14,7 @@ info:
     name: MIT
     url: https://opensource.org/licenses/MIT
 actions:
-  create_project:
+  createProject:
     help: Create new project in asana.
     http:
       port: 3000
@@ -67,7 +67,7 @@ actions:
         followers:
           help: The followers list from the project.
           type: list
-  create_task:
+  createTask:
     help: Create new task.
     http:
       port: 3000
@@ -89,7 +89,7 @@ actions:
         in: requestBody
         required: true
         help: The email address of assignee.
-      projects:
+      projectId:
         type: string
         in: requestBody
         help: The ID of project to create task in that project.
@@ -116,9 +116,6 @@ actions:
         assignee:
           help: The assignee details.
           type: object
-        created_at:
-          help: The created date time of task.
-          type: string
         followers:
           help: The followers list from the project.
           type: list
@@ -128,7 +125,7 @@ actions:
         workspace:
           help: The workspace details of project.
           type: object
-  delete_project:
+  deleteProject:
     help: Delete project.
     http:
       port: 3000
@@ -136,7 +133,7 @@ actions:
       path: /deleteproject
       contentType: application/json
     arguments:
-      project_id:
+      projectId:
         type: string
         in: requestBody
         required: true
@@ -151,10 +148,10 @@ actions:
         message:
           help: The success message or error message if occurred.
           type: string
-        status_code:
+        statusCode:
           help: Returns http status code.
           type: int
-  delete_task:
+  deleteTask:
     help: Delete task.
     http:
       port: 3000
@@ -162,7 +159,7 @@ actions:
       path: /deletetask
       contentType: application/json
     arguments:
-      task_id:
+      taskId:
         type: string
         in: requestBody
         required: true
@@ -177,10 +174,10 @@ actions:
         message:
           help: The success message or error message if occurred.
           type: string
-        status_code:
+        statusCode:
           help: Returns http status code.
           type: int
-  list_task:
+  listTask:
     help: List task.
     http:
       port: 3000
@@ -194,7 +191,7 @@ actions:
         required: true
         help: The workspace id to get tasks.
     output:
-      type: string
+      type: list
       contentType: application/json
       properties:
         name:
@@ -203,7 +200,7 @@ actions:
         id:
           help: The workspace ID.
           type: string
-  list_workspace:
+  listWorkspace:
     help: List workspace.
     http:
       port: 3000
@@ -211,7 +208,7 @@ actions:
       path: /listworkspace
       contentType: application/json
     output:
-      type: string
+      type: list
       contentType: application/json
       properties:
         name:
@@ -220,7 +217,7 @@ actions:
         id:
           help: The workspace ID.
           type: string
-  find_task:
+  findTask:
     help: Find task.
     http:
       port: 3000
@@ -228,7 +225,7 @@ actions:
       path: /findtask
       contentType: application/json
     arguments:
-      task_id:
+      taskId:
         type: string
         in: requestBody
         required: true
@@ -243,9 +240,6 @@ actions:
         assignee:
           help: The assignee details.
           type: object
-        created_at:
-          help: The created date time of task.
-          type: string
         followers:
           help: The followers list from the project.
           type: list
@@ -255,7 +249,7 @@ actions:
         workspace:
           help: The workspace details of project.
           type: object
-  find_project:
+  findProject:
     help: Find project.
     http:
       port: 3000
@@ -263,7 +257,7 @@ actions:
       path: /findproject
       contentType: application/json
     arguments:
-      project_id:
+      projectId:
         type: string
         in: requestBody
         required: true
@@ -278,9 +272,6 @@ actions:
         assignee:
           help: The assignee details.
           type: object
-        created_at:
-          help: The created date time of task.
-          type: string
         followers:
           help: The followers list from the project.
           type: list
@@ -290,7 +281,7 @@ actions:
         workspace:
           help: The workspace details of project.
           type: object
-  update_project:
+  updateProject:
     help: Update project in asana.
     http:
       port: 3000
@@ -341,7 +332,7 @@ actions:
         followers:
           help: The followers list from the project.
           type: list
-  list_project_tasks:
+  listProjectTasks:
     help: List all the tasks from project.
     http:
       port: 3000
@@ -349,20 +340,17 @@ actions:
       path: /listprojecttasks
       contentType: application/json
     arguments:
-      projects:
+      projectId:
         type: string
         in: requestBody
         required: true
         help: The project id to get all tasks.
     output:
-      type: string
+      type: list
       contentType: application/json
       properties:
         id:
           help: The ID of task.
-          type: string
-        modified_at:
-          help: The modified time.
           type: string
         name:
           help: The name of project.
@@ -402,9 +390,6 @@ actions:
             assignee:
               help: The assignee details.
               type: object
-            created_at:
-              help: The created date time of task.
-              type: string
             followers:
               help: The followers list from the project.
               type: list
