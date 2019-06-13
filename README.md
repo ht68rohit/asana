@@ -11,10 +11,54 @@ An OMG service for asana, it designed to help teams organize, track, and manage 
 
 ##### Create Project
 ```coffee
->>> asana createProject name:'name' notes:'notes' color:'color' workspace:'workspace' 
+>>> asana createProject name:'name' notes:'notes' color:'color' workspace:'workspaceId' public:'true/false'
+{"id": 1126990832838188,"name": "Demo Project Test","notes": "some notes for Demo Project","color":"dark-red","owner": {"name": "Rohit ","id": 1125282024722392},"workspace": {"name":"microservice","id": 1125282043940580},"members": [{"name": "Rohit ","id": 1125282024722392}],"followers": [{"name": "Rohit ","id": 1125282024722392}]}
+```
+##### Create Task
+```coffee
+>>> asana createTask name:'name' notes:'notes' projectId:'projectId' assignee:'assignee' workspace:'workspaceId' followers:'[abc@example.com,xyz@example.com]' hearted:'true/false'
 
 ```
+##### Delete Project
+```coffee
+>>> asana deleteProject projectId:'projectId'
 
+```
+##### Delete Task
+```coffee
+>>> asana deleteTask taskId:'taskId'
+
+```
+##### List Task
+```coffee
+>>> asana listTask workspace:'workspaceId'
+
+```
+##### List Workspace
+```coffee
+>>> asana listWorkspace
+
+```
+##### Find Task
+```coffee
+>>> asana findTask taskId:'taskId'
+
+```
+##### Find Project
+```coffee
+>>> asana findProject projectId:'projectId'
+
+```
+##### Update Project
+```coffee
+>>> asana updateProject id:'projectId' name:'name' notes:'notes' color:'color' public:'true/false'
+
+```
+##### List Tasks Form Project
+```coffee
+>>> asana listProjectTasks projectId:'projectId'
+
+```
 Curious to [learn more](https://docs.storyscript.io/)?
 
 ✨🍰✨
