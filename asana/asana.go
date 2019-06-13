@@ -1,14 +1,39 @@
 package asana
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/cloudevents/sdk-go"
 	asana "github.com/heaptracetechnology/microservice-asana/pkg/asana/v1"
 	result "github.com/heaptracetechnology/microservice-asana/result"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
+	"strconv"
+	"time"
 )
+
+type Payload struct {
+	EventId     string   `json:"eventID"`
+	EventType   string   `json:"eventType"`
+	ContentType string   `json:"contentType"`
+	Data        DataArgs `json:"data"`
+}
+
+type Subscribe struct {
+	Data      DataArgs `json:"data"`
+	Endpoint  string   `json:"endpoint"`
+	ID        string   `json:"id"`
+	IsTesting bool     `json:"istesting"`
+}
+
+type DataArgs struct {
+	ProjectID   string `json:"projectId"`
+	WorkspaceID string `json:"workspaceId"`
+	Existing    bool   `json:"existing"`
+}
 
 type AsanaArgument struct {
 	TaskID    string `json:"task_id,omitempty"`
@@ -20,6 +45,12 @@ type Message struct {
 	Message    string `json:"message"`
 	StatusCode int    `json:"status_code"`
 }
+
+var Listener = make(map[string]Subscribe)
+var rtmStarted bool
+var isExistingPrinted bool
+var client *asana.Client
+var oldTask *asana.Task
 
 //CreateProject asana
 func CreateProject(responseWriter http.ResponseWriter, request *http.Request) {
@@ -352,4 +383,193 @@ func ListProjectTasks(responseWriter http.ResponseWriter, request *http.Request)
 
 	bytes, _ := json.Marshal(tasklist)
 	result.WriteJsonResponse(responseWriter, bytes, http.StatusOK)
+}
+
+//SubscribeTasks asana
+func SubscribeTasks(responseWriter http.ResponseWriter, request *http.Request) {
+
+	var accessToken = os.Getenv("ACCESS_TOKEN")
+
+	var sub Subscribe
+	decoder := json.NewDecoder(request.Body)
+	decodeError := decoder.Decode(&sub)
+	if decodeError != nil {
+		result.WriteErrorResponse(responseWriter, decodeError)
+		return
+	}
+
+	if sub.Data.ProjectID == "" && sub.Data.WorkspaceID == "" {
+		message := Message{"false", "Please provide Project ID or Workspace ID", http.StatusBadRequest}
+		bytes, _ := json.Marshal(message)
+		result.WriteJsonResponse(responseWriter, bytes, http.StatusBadRequest)
+		return
+	}
+
+	var err error
+	client, err = asana.NewClient(accessToken)
+	if err != nil {
+		result.WriteErrorResponse(responseWriter, err)
+		return
+	}
+
+	Listener[sub.Data.WorkspaceID] = sub
+	if !rtmStarted {
+		go RTSAsana()
+		rtmStarted = true
+	}
+
+	bytes, _ := json.Marshal("Subscribed")
+	result.WriteJsonResponse(responseWriter, bytes, http.StatusOK)
+}
+
+//RTSAsana function
+func RTSAsana() {
+	isTest := false
+	for {
+		if len(Listener) > 0 {
+			for WorkspaceID, Sub := range Listener {
+				go getMessageUpdates(WorkspaceID, Sub.Data.ProjectID, Sub, Sub.Data.Existing)
+				isTest = Sub.IsTesting
+			}
+		} else {
+			rtmStarted = false
+			break
+		}
+		time.Sleep(5 * time.Second)
+		if isTest {
+			break
+		}
+	}
+}
+
+func getMessageUpdates(workspaceID, projectID string, sub Subscribe, existing bool) {
+
+	var finalTask *asana.Task
+	var finalTasks []*asana.Task
+	var allTasks []*asana.Task
+
+	if projectID != "" {
+
+		taskPagesChan, _, err := client.ListTasksForProject(&asana.TaskRequest{
+			ProjectID: projectID,
+		})
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		pageCount := 0
+		for page := range taskPagesChan {
+			if err := page.Err; err != nil {
+				log.Fatalln("Error : ", err)
+				return
+			}
+
+			for _, task := range page.Tasks {
+				taskDetails, _ := client.FindTaskByID(strconv.FormatInt(task.ID, 10))
+				allTasks = append(allTasks, taskDetails)
+			}
+			pageCount++
+		}
+	} else {
+		taskPagesChan, err := client.ListMyTasks(&asana.TaskRequest{
+			Workspace: workspaceID,
+		})
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		pageCount := 0
+		for page := range taskPagesChan {
+			if err := page.Err; err != nil {
+				log.Fatalln("Error : ", err)
+				return
+			}
+
+			for _, task := range page.Tasks {
+				taskDetails, _ := client.FindTaskByID(strconv.FormatInt(task.ID, 10))
+				allTasks = append(allTasks, taskDetails)
+			}
+			pageCount++
+		}
+	}
+
+	if isExistingPrinted == false {
+		if existing {
+			finalTasks = allTasks
+		} else {
+			if finalTask == nil {
+				finalTask = latestTask(allTasks)
+			}
+		}
+	} else {
+		finalTask = latestTask(allTasks)
+	}
+
+	contentType := "application/json"
+
+	t, err := cloudevents.NewHTTPTransport(cloudevents.WithTarget(sub.Endpoint), cloudevents.WithStructuredEncoding())
+	if err != nil {
+		log.Printf("failed to create transport, %v", err)
+		return
+	}
+
+	c, err := cloudevents.NewClient(t, cloudevents.WithTimeNow())
+	if err != nil {
+		log.Printf("failed to create client, %v", err)
+		return
+	}
+
+	source, err := url.Parse(sub.Endpoint)
+	event := cloudevents.Event{
+		Context: cloudevents.EventContextV01{
+			EventID:     sub.ID,
+			EventType:   "task",
+			Source:      cloudevents.URLRef{URL: *source},
+			ContentType: &contentType,
+		}.AsV01(),
+		Data: "",
+	}
+
+	if finalTasks != nil {
+		event.Data = finalTasks
+
+	} else {
+		event.Data = finalTask
+	}
+
+	if oldTask == nil && finalTask != nil {
+		oldTask = finalTask
+	}
+
+	if existing && !isExistingPrinted {
+		resp, err := c.Send(context.Background(), event)
+		if err != nil {
+			log.Printf("failed to send: %v", err)
+		}
+		fmt.Printf("Response1: \n%s\n", resp)
+		finalTasks = nil
+		isExistingPrinted = true
+
+	} else if oldTask != nil && finalTask.ID != oldTask.ID {
+		resp, err := c.Send(context.Background(), event)
+		if err != nil {
+			log.Printf("failed to send: %v", err)
+		}
+		fmt.Printf("Response2: \n%s\n", resp)
+		oldTask = finalTask
+		finalTask = nil
+	}
+}
+
+func latestTask(tasks []*asana.Task) *asana.Task {
+	if len(tasks) == 0 {
+		return nil
+	}
+	latest := tasks[0]
+	for _, task := range tasks {
+		if task.ID > latest.ID {
+			latest = task
+		}
+	}
+	return latest
 }

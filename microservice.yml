@@ -367,6 +367,53 @@ actions:
         name:
           help: The name of project.
           type: string
+  receive:
+    help: Start receiving newly added task details from asana.
+    events:
+      task:
+        help: Triggered anytime when any new task is added in asana.
+        arguments:
+          workspaceId:
+            type: string
+            in: requestBody
+            help: The workspace ID to subscribe.
+          projectId:
+            type: string
+            in: requestBody
+            help: The project ID to subscribe.
+          existing:
+            type: boolean
+            in: requestBody
+            required: true
+            help: Set true to get all existing tasks or false to get only new task added to board after subscription.
+        http:
+          port: 3000
+          subscribe:
+            method: post
+            path: /subscribe
+            contentType: application/json
+        output:
+          contentType: application/json
+          type: object
+          properties:
+            id:
+              help: The ID of task.
+              type: string
+            assignee:
+              help: The assignee details.
+              type: object
+            created_at:
+              help: The created date time of task.
+              type: string
+            followers:
+              help: The followers list from the project.
+              type: list
+            name:
+              help: The name of project.
+              type: string
+            workspace:
+              help: The workspace details of project.
+              type: object
 environment:
   ACCESS_TOKEN:
     type: string

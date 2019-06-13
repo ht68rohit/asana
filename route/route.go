@@ -3,7 +3,6 @@ package route
 import (
     "github.com/gorilla/mux"
     asana "github.com/heaptracetechnology/microservice-asana/asana"
-    "log"
     "net/http"
 )
 
@@ -83,13 +82,18 @@ var routes = Routes{
         "/listprojecttasks",
         asana.ListProjectTasks,
     },
+    Route{
+        "SubscribeTasks",
+        "POST",
+        "/subscribe",
+        asana.SubscribeTasks,
+    },
 }
 
 func NewRouter() *mux.Router {
     router := mux.NewRouter().StrictSlash(true)
     for _, route := range routes {
         var handler http.Handler
-        log.Println(route.Name)
         handler = route.HandlerFunc
 
         router.

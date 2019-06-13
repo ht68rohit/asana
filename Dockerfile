@@ -6,6 +6,8 @@ RUN go get github.com/orijtech/asana/v1
 
 RUN go get github.com/odeke-em/asana/v1
 
+RUN go get github.com/cloudevents/sdk-go
+
 WORKDIR /go/src/github.com/heaptracetechnology/microservice-asana
 
 ADD . /go/src/github.com/heaptracetechnology/microservice-asana
