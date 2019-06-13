@@ -12,7 +12,7 @@ An OMG service for asana, it designed to help teams organize, track, and manage 
 ##### Create Project
 ```coffee
 >>> asana createProject name:'name' notes:'notes' color:'color' workspace:'workspaceId' public:'true/false'
-{"id": 1126990832838188,"name": "Demo Project Test","notes": "some notes for Demo Project","color":"dark-red","owner": {"name": "Rohit ","id": 1125282024722392},"workspace": {"name":"microservice","id": 1125282043940580},"members": [{"name": "Rohit ","id": 1125282024722392}],"followers": [{"name": "Rohit ","id": 1125282024722392}]}
+
 ```
 ##### Create Task
 ```coffee
