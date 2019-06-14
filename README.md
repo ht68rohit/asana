@@ -22,12 +22,12 @@ An OMG service for asana, it designed to help teams organize, track, and manage 
 ##### Delete Project
 ```coffee
 >>> asana deleteProject projectId:'projectId'
-{"success":"true/false","message":"success/failure message","statusCode":"statusCode"}
+{"success":"true/false","message":"success/failure message","statusCode":"HTTPstatusCode"}
 ```
 ##### Delete Task
 ```coffee
 >>> asana deleteTask taskId:'taskId'
-{"success":"true/false","message":"success/failure message","statusCode":"statusCode"}
+{"success":"true/false","message":"success/failure message","statusCode":"HTTPstatusCode"}
 ```
 ##### List Task
 ```coffee
