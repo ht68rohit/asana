@@ -109,7 +109,7 @@ $ omg run listProjectTasks -a projectId=<PROJECT_ID> -e ACCESS_TOKEN=<ACCESS_TOK
 $ omg subscribe receive task -a workspaceId=<WORKSPACE_ID> -a projectId=<PROJECT_ID> -a existing=<TRUE/FALSE> -e ACCESS_TOKEN=<ACCESS_TOKEN>
 ```
 
-**Note**: the OMG CLI requires [Docker](https://docs.docker.com/install/) to be installed.
+**Note**: The OMG CLI requires [Docker](https://docs.docker.com/install/) to be installed.
 
 ## License
 [MIT License](https://github.com/heaptracetechnology/microservice-asana/blob/master/LICENSE).
