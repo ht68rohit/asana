@@ -112,5 +112,5 @@ $ omg subscribe receive task -a workspaceId=<WORKSPACE_ID> -a projectId=<PROJECT
 **Note**: the OMG CLI requires [Docker](https://docs.docker.com/install/) to be installed.
 
 ## License
-[MIT License](https://choosealicense.com/licenses/mit/).
+[MIT License](https://github.com/heaptracetechnology/microservice-asana/blob/master/LICENSE).
 ```
