@@ -194,12 +194,21 @@ actions:
       type: list
       contentType: application/json
       properties:
-        name:
-          help: The name of workspace.
-          type: string
         id:
-          help: The workspace ID.
+          help: The ID of task.
           type: string
+        assignee:
+          help: The assignee details.
+          type: object
+        followers:
+          help: The followers list from the project.
+          type: list
+        name:
+          help: The name of project.
+          type: string
+        workspace:
+          help: The workspace details of project.
+          type: object
   listWorkspace:
     help: List workspace.
     http:

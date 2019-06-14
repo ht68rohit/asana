@@ -12,52 +12,52 @@ An OMG service for asana, it designed to help teams organize, track, and manage 
 ##### Create Project
 ```coffee
 >>> asana createProject name:'name' notes:'notes' color:'color' workspace:'workspaceId' public:'true/false'
-
+{"id": "projectId","name": "projectName","notes": "projectNotes","owner": {"ownerDetails"},"workspace": {"workspaceDetails"},"members": ["membersList"],"followers": ["followersList"]}
 ```
 ##### Create Task
 ```coffee
->>> asana createTask name:'name' notes:'notes' projectId:'projectId' assignee:'assignee' workspace:'workspaceId' followers:'[abc@example.com,xyz@example.com]' hearted:'true/false'
-
+>>> asana createTask name:'name' notes:'notes' projectId:'projectId' assignee:'assignee' workspace: 'workspaceId' followers: '[abc@example.com,xyz@example.com]' hearted: 'true/false'
+{"id": "taskId","assignee": {"assigneeDetails"},"followers": ["followersList"],"hearted": "true/false","name": "taskName","notes": "taskNotes","projects": ["projectDetails"],"workspace": "workspaceDetails"}}
 ```
 ##### Delete Project
 ```coffee
 >>> asana deleteProject projectId:'projectId'
-
+{"success":"true/false","message":"success/failure message","statusCode":"statusCode"}
 ```
 ##### Delete Task
 ```coffee
 >>> asana deleteTask taskId:'taskId'
-
+{"success":"true/false","message":"success/failure message","statusCode":"statusCode"}
 ```
 ##### List Task
 ```coffee
 >>> asana listTask workspace:'workspaceId'
-
+[{"id": "taskId","assignee": {"assigneeDetails"},"followers": ["followersList"],"hearted": "true/false","name": "taskName","notes": "taskNotes","projects": ["projectDetails"],"workspace": {"workspaceDetails"}}]
 ```
 ##### List Workspace
 ```coffee
 >>> asana listWorkspace
-
+[{"name":"workspaceName","id":"workspaceId"}]
 ```
 ##### Find Task
 ```coffee
 >>> asana findTask taskId:'taskId'
-
+{"id": "taskId","assignee": {"assigneeDetails"},"followers": ["followersList"],"hearted": "true/false","name": "taskName","notes": "taskNotes","projects": ["projectDetails"],"workspace": "workspaceDetails"}}
 ```
 ##### Find Project
 ```coffee
 >>> asana findProject projectId:'projectId'
-
+{"id": "projectId","name": "projectName","notes": "projectNotes","owner": {"ownerDetails"},"workspace": {"workspaceDetails"},"members": ["membersList"],"followers": ["followersList"]}
 ```
 ##### Update Project
 ```coffee
 >>> asana updateProject id:'projectId' name:'name' notes:'notes' color:'color' public:'true/false'
-
+{"id": "projectId","name": "projectName","notes": "projectNotes","owner": {"ownerDetails"},"workspace": {"workspaceDetails"},"members": ["membersList"],"followers": ["followersList"]}
 ```
 ##### List Tasks Form Project
 ```coffee
 >>> asana listProjectTasks projectId:'projectId'
-
+[{"id": "taskId","assignee": {"assigneeDetails"},"followers": ["followersList"],"hearted": "true/false","name": "taskName","notes": "taskNotes","projects": ["projectDetails"],"workspace": {"workspaceDetails"}}]
 ```
 Curious to [learn more](https://docs.storyscript.io/)?
 
