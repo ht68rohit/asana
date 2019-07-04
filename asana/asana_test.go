@@ -28,12 +28,18 @@ type NamedAndIDdEntity struct {
 }
 
 var (
-	ACCESS_TOKEN = os.Getenv("ASANA_ACCESS_TOKEN")
+	accessToken   = os.Getenv("ASANA_ACCESS_TOKEN")
+	workspaceID   = os.Getenv("ASANA_WORKSPACE_ID")
+	projectID     = os.Getenv("ASANA_PROJECT_ID")
+	taskID        = os.Getenv("ASANA_TASK_ID")
+	assignee      = os.Getenv("ASANA_ASSIGNEE")
+	findTaskID    = os.Getenv("ASANA_FIND_TASK_ID")
+	findProjectID = os.Getenv("ASANA_FIND_PROJECT_ID")
 )
 
 var _ = Describe("Create project in Asana without access token", func() {
 
-	asana := AsanaArgs{Name: "Test Project", Workspace: "1125282043940580", Public: true}
+	asana := AsanaArgs{Name: "Test Project", Workspace: workspaceID, Public: true}
 	requestBody := new(bytes.Buffer)
 	jsonErr := json.NewEncoder(requestBody).Encode(asana)
 	if jsonErr != nil {
@@ -59,7 +65,7 @@ var _ = Describe("Create project in Asana without access token", func() {
 
 var _ = Describe("Create project in Asana with invalid param", func() {
 
-	os.Setenv("ACCESS_TOKEN", ACCESS_TOKEN)
+	os.Setenv("ACCESS_TOKEN", accessToken)
 
 	asana := []byte(`{"status":false}`)
 	requestBody := new(bytes.Buffer)
@@ -87,7 +93,7 @@ var _ = Describe("Create project in Asana with invalid param", func() {
 
 var _ = Describe("Create project in Asana without workspace ID", func() {
 
-	os.Setenv("ACCESS_TOKEN", ACCESS_TOKEN)
+	os.Setenv("ACCESS_TOKEN", accessToken)
 
 	asana := AsanaArgs{Name: "Test Project", Public: true}
 	requestBody := new(bytes.Buffer)
@@ -115,9 +121,9 @@ var _ = Describe("Create project in Asana without workspace ID", func() {
 
 var _ = Describe("Create project in Asana", func() {
 
-	os.Setenv("ACCESS_TOKEN", ACCESS_TOKEN)
+	os.Setenv("ACCESS_TOKEN", accessToken)
 
-	asana := AsanaArgs{Name: "Test Project", Workspace: "1125282043940580", Public: true}
+	asana := AsanaArgs{Name: "Test Project", Workspace: workspaceID, Public: true}
 	requestBody := new(bytes.Buffer)
 	jsonErr := json.NewEncoder(requestBody).Encode(asana)
 	if jsonErr != nil {
@@ -145,7 +151,7 @@ var _ = Describe("Create task in project Asana without access token", func() {
 
 	os.Setenv("ACCESS_TOKEN", "")
 
-	asana := AsanaArgs{Name: "Test Task", Workspace: "1125282043940580", Assignee: "demot636@gmail.com"}
+	asana := AsanaArgs{Name: "Test Task", Workspace: workspaceID, Assignee: assignee}
 	requestBody := new(bytes.Buffer)
 	jsonErr := json.NewEncoder(requestBody).Encode(asana)
 	if jsonErr != nil {
@@ -171,7 +177,7 @@ var _ = Describe("Create task in project Asana without access token", func() {
 
 var _ = Describe("Create task in project Asana with invalid param", func() {
 
-	os.Setenv("ACCESS_TOKEN", ACCESS_TOKEN)
+	os.Setenv("ACCESS_TOKEN", accessToken)
 
 	asana := []byte(`{"status":false}`)
 	requestBody := new(bytes.Buffer)
@@ -199,9 +205,9 @@ var _ = Describe("Create task in project Asana with invalid param", func() {
 
 var _ = Describe("Create task in project Asana without workspace ID", func() {
 
-	os.Setenv("ACCESS_TOKEN", ACCESS_TOKEN)
+	os.Setenv("ACCESS_TOKEN", accessToken)
 
-	asana := AsanaArgs{Name: "Test Task", Assignee: "demot636@gmail.com"}
+	asana := AsanaArgs{Name: "Test Task", Assignee: assignee}
 	requestBody := new(bytes.Buffer)
 	jsonErr := json.NewEncoder(requestBody).Encode(asana)
 	if jsonErr != nil {
@@ -227,10 +233,9 @@ var _ = Describe("Create task in project Asana without workspace ID", func() {
 
 var _ = Describe("Create task in project Asana", func() {
 
-	os.Setenv("ACCESS_TOKEN", ACCESS_TOKEN)
+	os.Setenv("ACCESS_TOKEN", accessToken)
 
-	asana := AsanaArgs{Name: "Test13213113131", Workspace: "1125282043940580", Assignee: "demot636@gmail.com"}
-	asana.ProjectID = "1125306086215096"
+	asana := AsanaArgs{Name: "Test", Workspace: workspaceID, Assignee: assignee}
 	requestBody := new(bytes.Buffer)
 	jsonErr := json.NewEncoder(requestBody).Encode(asana)
 	if jsonErr != nil {
@@ -258,7 +263,7 @@ var _ = Describe("Delete project in Asana without access token", func() {
 
 	os.Setenv("ACCESS_TOKEN", "")
 
-	asana := AsanaArgs{ProjectID: "1125480771523704"}
+	asana := AsanaArgs{ProjectID: projectID}
 	requestBody := new(bytes.Buffer)
 	jsonErr := json.NewEncoder(requestBody).Encode(asana)
 	if jsonErr != nil {
@@ -284,7 +289,7 @@ var _ = Describe("Delete project in Asana without access token", func() {
 
 var _ = Describe("Delete project in Asana", func() {
 
-	os.Setenv("ACCESS_TOKEN", ACCESS_TOKEN)
+	os.Setenv("ACCESS_TOKEN", accessToken)
 
 	asana := []byte(`{"status":false}`)
 	requestBody := new(bytes.Buffer)
@@ -312,9 +317,9 @@ var _ = Describe("Delete project in Asana", func() {
 
 var _ = Describe("Delete project in Asana", func() {
 
-	os.Setenv("ACCESS_TOKEN", ACCESS_TOKEN)
+	os.Setenv("ACCESS_TOKEN", accessToken)
 
-	asana := AsanaArgs{ProjectID: "1125480771523704"}
+	asana := AsanaArgs{ProjectID: projectID}
 	requestBody := new(bytes.Buffer)
 	jsonErr := json.NewEncoder(requestBody).Encode(asana)
 	if jsonErr != nil {
@@ -342,7 +347,7 @@ var _ = Describe("Delete task in Asana without access token", func() {
 
 	os.Setenv("ACCESS_TOKEN", "")
 
-	asana := AsanaArgs{TaskID: "1125513435136526"}
+	asana := AsanaArgs{TaskID: taskID}
 	requestBody := new(bytes.Buffer)
 	jsonErr := json.NewEncoder(requestBody).Encode(asana)
 	if jsonErr != nil {
@@ -368,7 +373,7 @@ var _ = Describe("Delete task in Asana without access token", func() {
 
 var _ = Describe("Delete task in Asana", func() {
 
-	os.Setenv("ACCESS_TOKEN", ACCESS_TOKEN)
+	os.Setenv("ACCESS_TOKEN", accessToken)
 
 	asana := []byte(`{"status":false}`)
 	requestBody := new(bytes.Buffer)
@@ -396,9 +401,9 @@ var _ = Describe("Delete task in Asana", func() {
 
 var _ = Describe("Delete task in Asana", func() {
 
-	os.Setenv("ACCESS_TOKEN", ACCESS_TOKEN)
+	os.Setenv("ACCESS_TOKEN", accessToken)
 
-	asana := AsanaArgs{TaskID: "1125513435136526"}
+	asana := AsanaArgs{TaskID: taskID}
 	requestBody := new(bytes.Buffer)
 	jsonErr := json.NewEncoder(requestBody).Encode(asana)
 	if jsonErr != nil {
@@ -452,7 +457,7 @@ var _ = Describe("List task in Asana without access token", func() {
 
 var _ = Describe("List task in Asana with invalid param", func() {
 
-	os.Setenv("ACCESS_TOKEN", ACCESS_TOKEN)
+	os.Setenv("ACCESS_TOKEN", accessToken)
 
 	asana := []byte(`{"status":false}`)
 	requestBody := new(bytes.Buffer)
@@ -480,9 +485,9 @@ var _ = Describe("List task in Asana with invalid param", func() {
 
 var _ = Describe("List task in Asana with invalid Workspace Id", func() {
 
-	os.Setenv("ACCESS_TOKEN", ACCESS_TOKEN)
+	os.Setenv("ACCESS_TOKEN", accessToken)
 
-	asana := AsanaArgs{Workspace: "1125282043940580111"}
+	asana := AsanaArgs{Workspace: "mockWorkspaceID"}
 	requestBody := new(bytes.Buffer)
 	jsonErr := json.NewEncoder(requestBody).Encode(asana)
 	if jsonErr != nil {
@@ -508,9 +513,9 @@ var _ = Describe("List task in Asana with invalid Workspace Id", func() {
 
 var _ = Describe("List task in Asana", func() {
 
-	os.Setenv("ACCESS_TOKEN", ACCESS_TOKEN)
+	os.Setenv("ACCESS_TOKEN", accessToken)
 
-	asana := AsanaArgs{Workspace: "1125282043940580"}
+	asana := AsanaArgs{Workspace: workspaceID}
 	requestBody := new(bytes.Buffer)
 	jsonErr := json.NewEncoder(requestBody).Encode(asana)
 	if jsonErr != nil {
@@ -564,7 +569,7 @@ var _ = Describe("List workspaces in Asana without access token", func() {
 
 var _ = Describe("List workspaces in Asana", func() {
 
-	os.Setenv("ACCESS_TOKEN", ACCESS_TOKEN)
+	os.Setenv("ACCESS_TOKEN", accessToken)
 
 	asana := AsanaArgs{}
 	requestBody := new(bytes.Buffer)
@@ -594,7 +599,7 @@ var _ = Describe("Find task from Asana without access token", func() {
 
 	os.Setenv("ACCESS_TOKEN", "")
 
-	asana := AsanaArgs{TaskID: "1125513435136524"}
+	asana := AsanaArgs{TaskID: taskID}
 	requestBody := new(bytes.Buffer)
 	jsonErr := json.NewEncoder(requestBody).Encode(asana)
 	if jsonErr != nil {
@@ -648,7 +653,7 @@ var _ = Describe("Find task from Asana with invaid param", func() {
 
 var _ = Describe("Find task from Asana without Task ID", func() {
 
-	os.Setenv("ACCESS_TOKEN", ACCESS_TOKEN)
+	os.Setenv("ACCESS_TOKEN", accessToken)
 
 	asana := AsanaArgs{TaskID: ""}
 	requestBody := new(bytes.Buffer)
@@ -676,9 +681,9 @@ var _ = Describe("Find task from Asana without Task ID", func() {
 
 var _ = Describe("Find task from Asana", func() {
 
-	os.Setenv("ACCESS_TOKEN", ACCESS_TOKEN)
+	os.Setenv("ACCESS_TOKEN", accessToken)
 
-	asana := AsanaArgs{TaskID: "1125513435136524"}
+	asana := AsanaArgs{TaskID: findTaskID}
 	requestBody := new(bytes.Buffer)
 	jsonErr := json.NewEncoder(requestBody).Encode(asana)
 	if jsonErr != nil {
@@ -706,7 +711,7 @@ var _ = Describe("Find project from Asana without access token", func() {
 
 	os.Setenv("ACCESS_TOKEN", "")
 
-	asana := AsanaArgs{ProjectID: "1125306086215096"}
+	asana := AsanaArgs{ProjectID: projectID}
 	requestBody := new(bytes.Buffer)
 	jsonErr := json.NewEncoder(requestBody).Encode(asana)
 	if jsonErr != nil {
@@ -760,7 +765,7 @@ var _ = Describe("Find project from Asana with invaid param", func() {
 
 var _ = Describe("Find project from Asana without project ID", func() {
 
-	os.Setenv("ACCESS_TOKEN", ACCESS_TOKEN)
+	os.Setenv("ACCESS_TOKEN", accessToken)
 
 	asana := AsanaArgs{ProjectID: ""}
 	requestBody := new(bytes.Buffer)
@@ -788,9 +793,9 @@ var _ = Describe("Find project from Asana without project ID", func() {
 
 var _ = Describe("Find project from Asana", func() {
 
-	os.Setenv("ACCESS_TOKEN", ACCESS_TOKEN)
+	os.Setenv("ACCESS_TOKEN", accessToken)
 
-	asana := AsanaArgs{ProjectID: "1125306086215096"}
+	asana := AsanaArgs{ProjectID: findProjectID}
 	requestBody := new(bytes.Buffer)
 	jsonErr := json.NewEncoder(requestBody).Encode(asana)
 	if jsonErr != nil {
@@ -818,7 +823,7 @@ var _ = Describe("Update project in Asana without access token", func() {
 
 	os.Setenv("ACCESS_TOKEN", "")
 
-	asana := AsanaArgs{Project: "1125306086215096", Name: "New Updated Project"}
+	asana := AsanaArgs{Project: projectID, Name: "New Updated Project"}
 	requestBody := new(bytes.Buffer)
 	jsonErr := json.NewEncoder(requestBody).Encode(asana)
 	if jsonErr != nil {
@@ -844,7 +849,7 @@ var _ = Describe("Update project in Asana without access token", func() {
 
 var _ = Describe("Update project in Asana with invalid param", func() {
 
-	os.Setenv("ACCESS_TOKEN", ACCESS_TOKEN)
+	os.Setenv("ACCESS_TOKEN", accessToken)
 
 	asana := []byte(`{"status":false}`)
 	requestBody := new(bytes.Buffer)
@@ -872,7 +877,7 @@ var _ = Describe("Update project in Asana with invalid param", func() {
 
 var _ = Describe("Update project in Asana without project ID ", func() {
 
-	os.Setenv("ACCESS_TOKEN", ACCESS_TOKEN)
+	os.Setenv("ACCESS_TOKEN", accessToken)
 
 	asana := AsanaArgs{Name: "New Updated Project"}
 	requestBody := new(bytes.Buffer)
@@ -900,9 +905,9 @@ var _ = Describe("Update project in Asana without project ID ", func() {
 
 var _ = Describe("Update project in Asana", func() {
 
-	os.Setenv("ACCESS_TOKEN", ACCESS_TOKEN)
+	os.Setenv("ACCESS_TOKEN", accessToken)
 
-	asana := AsanaArgs{Project: "1125306086215096", Name: "New Updated Project"}
+	asana := AsanaArgs{Project: findProjectID, Name: "New Updated Project"}
 	requestBody := new(bytes.Buffer)
 	jsonErr := json.NewEncoder(requestBody).Encode(asana)
 	if jsonErr != nil {
@@ -930,7 +935,7 @@ var _ = Describe("List tasks from project in Asana without access token", func()
 
 	os.Setenv("ACCESS_TOKEN", "")
 
-	asana := AsanaArgs{ProjectID: "1125306086215096"}
+	asana := AsanaArgs{ProjectID: projectID}
 	requestBody := new(bytes.Buffer)
 	jsonErr := json.NewEncoder(requestBody).Encode(asana)
 	if jsonErr != nil {
@@ -956,7 +961,7 @@ var _ = Describe("List tasks from project in Asana without access token", func()
 
 var _ = Describe("List tasks from project in Asana with invalid param", func() {
 
-	os.Setenv("ACCESS_TOKEN", ACCESS_TOKEN)
+	os.Setenv("ACCESS_TOKEN", accessToken)
 
 	asana := []byte(`{"status":false}`)
 	requestBody := new(bytes.Buffer)
@@ -984,9 +989,9 @@ var _ = Describe("List tasks from project in Asana with invalid param", func() {
 
 var _ = Describe("List tasks from project in Asana with invalid project Id", func() {
 
-	os.Setenv("ACCESS_TOKEN", ACCESS_TOKEN)
+	os.Setenv("ACCESS_TOKEN", accessToken)
 
-	asana := AsanaArgs{ProjectID: "1125306086215096111"}
+	asana := AsanaArgs{ProjectID: projectID}
 	requestBody := new(bytes.Buffer)
 	jsonErr := json.NewEncoder(requestBody).Encode(asana)
 	if jsonErr != nil {
@@ -1012,9 +1017,9 @@ var _ = Describe("List tasks from project in Asana with invalid project Id", fun
 
 var _ = Describe("List tasks from project in Asana", func() {
 
-	os.Setenv("ACCESS_TOKEN", ACCESS_TOKEN)
+	os.Setenv("ACCESS_TOKEN", accessToken)
 
-	asana := AsanaArgs{ProjectID: "1125306086215096"}
+	asana := AsanaArgs{ProjectID: findProjectID}
 	requestBody := new(bytes.Buffer)
 	jsonErr := json.NewEncoder(requestBody).Encode(asana)
 	if jsonErr != nil {
@@ -1042,7 +1047,7 @@ var _ = Describe("Subscribe asana for task without token", func() {
 
 	os.Setenv("ACCESS_TOKEN", "")
 
-	data := DataArgs{WorkspaceID: "1125282043940580", Existing: true}
+	data := DataArgs{WorkspaceID: workspaceID, Existing: true}
 	sub := Subscribe{Endpoint: "https://webhook.site/3cee781d-0a87-4966-bdec-9635436294e9",
 		ID:        "1",
 		IsTesting: true,
@@ -1072,7 +1077,7 @@ var _ = Describe("Subscribe asana for task without token", func() {
 
 var _ = Describe("Subscribe asana for task without any id's", func() {
 
-	os.Setenv("ACCESS_TOKEN", ACCESS_TOKEN)
+	os.Setenv("ACCESS_TOKEN", accessToken)
 
 	data := DataArgs{WorkspaceID: "", ProjectID: "", Existing: true}
 	sub := Subscribe{Endpoint: "https://webhook.site/3cee781d-0a87-4966-bdec-9635436294e9",
@@ -1104,9 +1109,9 @@ var _ = Describe("Subscribe asana for task without any id's", func() {
 
 var _ = Describe("Subscribe asana for task", func() {
 
-	os.Setenv("ACCESS_TOKEN", ACCESS_TOKEN)
+	os.Setenv("ACCESS_TOKEN", accessToken)
 
-	data := DataArgs{WorkspaceID: "1125282043940580", Existing: true}
+	data := DataArgs{WorkspaceID: workspaceID, Existing: true}
 	sub := Subscribe{Endpoint: "https://webhook.site/3cee781d-0a87-4966-bdec-9635436294e9",
 		ID:        "1",
 		IsTesting: true,
